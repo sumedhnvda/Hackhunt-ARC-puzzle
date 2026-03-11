@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ARC testing interface</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/testing_interface.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/testing_interface.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="modal_bg">
+        <div id="modal">
+            <h2 style="font-size: 2em; margin-bottom: 20px; color: #333;">Welcome to the HackHunt ARC-AGI Challenge!
+            </h2>
+            <div
+                style="font-size: 1.2em; line-height: 1.6; text-align: left; background: #fdfdfd; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+                <p><strong>Instructions:</strong></p>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li>You must solve 3 random 3x3 puzzles.</li>
+                    <li>For each puzzle, observe the <i>Test input grid</i> on the left and the <i>Task
+                            demonstration</i> examples above.</li>
+                    <li>Deduce the underlying pattern or rule from the examples.</li>
+                    <li>Apply that rule to the <i>Test input grid</i> to generate the correct output grid on the right.
+                    </li>
+                    <li>You can resize the grid, pick colors from the bottom palette, edit individual cells, or use the
+                        flood-fill tool.</li>
+                    <li>Your time is recorded, but you can jump back and forth between tasks as your partial progress is
+                        saved!</li>
+                </ul>
+            </div>
+            <br />
+            <button onclick="startHackHunt()" id="start_hackhunt_btn"
+                style="font-size: 1.5em; padding: 15px 30px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">Start
+                HackHunt</button>
+        </div>
+    </div>
+    <div id="workspace">
+
+        <div id="demonstration_examples_view">
+            <div class="text" id="task_demo_header">Task demonstration</div>
+            <div id="task_preview"></div>
+        </div>
+
+        <div id="evaluation_view">
+
+            <div id="evaluation-input-view">
+                <div class="text">Test input grid <span id="current_test_input_id_display">0</span>/<span
+                        id="total_test_input_count_display">0</span>
+                    <button onclick="nextTestInput()">Next test input</button>
+                </div>
+
+                <div id="evaluation_input" class="selectable_grid"></div>
+            </div>
+
+            <div id="evaluation_output_editor">
+
+                <div id="hackhunt_dashboard"
+                    style="display: none; padding: 20px; background: #fff; border: 2px solid #e0e0e0; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <div style="font-size: 1.8em; font-weight: bold; color: #333;">⏱ <span
+                                id="hackhunt_timer">00:00</span></div>
+                        <div style="font-size: 1.2em; font-weight: bold; color: #666;">Solved: <span
+                                id="hackhunt_solved_count" style="color: #4CAF50;">0</span> / 3</div>
+                    </div>
+                    <div style="margin-bottom: 15px; padding: 10px; background-color: #f5f5f5; border-left: 4px solid #2196F3; border-radius: 4px;">
+                        <div style="font-size: 0.9em; color: #666; font-weight: 600;">
+                            <span id="hackhunt_puzzle_id" style="font-family: 'Courier New', monospace; color: #2196F3;">Puzzle: --</span>
+                        </div>
+                    </div>
+                    <div id="hackhunt_nav_buttons" style="display: flex; gap: 10px;">
+                        <button id="nav_btn_0" onclick="switchHackHuntTask(0)" class="nav-button">Task 1</button>
+                        <button id="nav_btn_1" onclick="switchHackHuntTask(1)" class="nav-button">Task 2</button>
+                        <button id="nav_btn_2" onclick="switchHackHuntTask(2)" class="nav-button">Task 3</button>
+                    </div>
+                    <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
+                        <label for="show_symbol_numbers" style="font-size: 1.1em; color: #555;">Show symbol numbers:
+                        </label>
+                        <input type="checkbox" id="show_symbol_numbers" name="show_symbol_numbers"
+                            onchange="changeSymbolVisibility()" style="width: 18px; height: 18px;">
+                    </div>
+                    <p style="display: none;">
+                        <label id='task_name'> Task name: </label>
+                    </p>
+                </div>
+
+                <div id="edition_view">
+                    <div id="editor_grid_control_btns">
+                        <div id="resize_control_btns">
+                            <label for="output_grid_size">Change grid size: </label>
+                            <input type="text" id="output_grid_size" class="grid_size_field" name="size" value="3x3">
+                            <button onclick="resizeOutputGrid()" id="resize_btn">Resize</button>
+                        </div>
+
+                        <button onclick="copyFromInput()">Copy from input</button>
+                        <button onclick="resetOutputGrid()">Reset grid</button>
+                        <button onclick="submitSolution()" id="submit_solution_btn">Submit!</button>
+                    </div>
+
+                    <div id="output_grid">
+                        <div class="edition_grid selectable_grid">
+                            <div class="row">
+                                <div class="cell" symbol="0" x="0" y="0"></div>
+                                <div class="cell" symbol="0" x="0" y="1"></div>
+                                <div class="cell" symbol="0" x="0" y="2"></div>
+                            </div>
+                            <div class="row">
+                                <div class="cell" symbol="0" x="1" y="0"></div>
+                                <div class="cell" symbol="0" x="1" y="1"></div>
+                                <div class="cell" symbol="0" x="1" y="2"></div>
+                            </div>
+                            <div class="row">
+                                <div class="cell" symbol="0" x="2" y="0"></div>
+                                <div class="cell" symbol="0" x="2" y="1"></div>
+                                <div class="cell" symbol="0" x="2" y="2"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div id="toolbar">
+                        <div>
+                            <input type="radio" id="tool_edit" name="tool_switching" value="edit" checked>
+                            <label for="tool_edit">Edit</label>
+
+                            <input type="radio" id="tool_select" name="tool_switching" value="select">
+                            <label for="tool_select">Select</label>
+
+                            <input type="radio" id="tool_floodfill" name="tool_switching" value="floodfill">
+                            <label for="tool_floodfill">Flood fill</label>
+                        </div>
+                    </div>
+
+                    <div id="symbol_picker">
+                        <div class="symbol_preview symbol_0 selected-symbol-preview" symbol="0"></div>
+                        <div class="symbol_preview symbol_1" symbol="1"></div>
+                        <div class="symbol_preview symbol_2" symbol="2"></div>
+                        <div class="symbol_preview symbol_3" symbol="3"></div>
+                        <div class="symbol_preview symbol_4" symbol="4"></div>
+                        <div class="symbol_preview symbol_5" symbol="5"></div>
+                        <div class="symbol_preview symbol_6" symbol="6"></div>
+                        <div class="symbol_preview symbol_7" symbol="7"></div>
+                        <div class="symbol_preview symbol_8" symbol="8"></div>
+                        <div class="symbol_preview symbol_9" symbol="9"></div>
+                    </div>
+                </div>
+
+                <div id="error_display"></div>
+                <div id="info_display"></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
