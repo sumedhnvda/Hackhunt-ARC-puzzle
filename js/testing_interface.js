@@ -247,7 +247,7 @@ function startHackHunt() {
     var selectedFiles = shuffled.slice(0, 3);
     
     var fetchPromises = selectedFiles.map(filename => 
-        $.getJSON("../data/training/" + filename)
+        $.getJSON("data/training/" + filename)
     );
     
     $.when.apply($, fetchPromises).done(function() {
