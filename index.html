@@ -26,7 +26,9 @@
                 style="font-size: 1.2em; line-height: 1.6; text-align: left; background: #fdfdfd; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
                 <p><strong>Instructions:</strong></p>
                 <ul style="margin-left: 20px; margin-bottom: 20px;">
-                    <li>You must solve 3 random 3x3 puzzles.</li>
+                    <li>You must solve <strong>9 puzzles</strong> of increasing difficulty: <strong>3 Easy</strong>
+                        (3×3), <strong>3 Medium</strong> (larger grids, multi-step rules), and <strong>3 Hard</strong>
+                        (complex reasoning, variable grid sizes).</li>
                     <li>For each puzzle, observe the <i>Test input grid</i> on the left and the <i>Task
                             demonstration</i> examples above.</li>
                     <li>Deduce the underlying pattern or rule from the examples.</li>
@@ -71,17 +73,18 @@
                         <div style="font-size: 1.8em; font-weight: bold; color: #333;">⏱ <span
                                 id="hackhunt_timer">00:00</span></div>
                         <div style="font-size: 1.2em; font-weight: bold; color: #666;">Solved: <span
-                                id="hackhunt_solved_count" style="color: #4CAF50;">0</span> / 3</div>
+                                id="hackhunt_solved_count" style="color: #4CAF50;">0</span> / <span
+                                id="hackhunt_total_count">13</span></div>
                     </div>
-                    <div style="margin-bottom: 15px; padding: 10px; background-color: #f5f5f5; border-left: 4px solid #2196F3; border-radius: 4px;">
+                    <div
+                        style="margin-bottom: 15px; padding: 10px; background-color: #f5f5f5; border-left: 4px solid #2196F3; border-radius: 4px;">
                         <div style="font-size: 0.9em; color: #666; font-weight: 600;">
-                            <span id="hackhunt_puzzle_id" style="font-family: 'Courier New', monospace; color: #2196F3;">Puzzle: --</span>
+                            <span id="hackhunt_puzzle_id"
+                                style="font-family: 'Courier New', monospace; color: #2196F3;">Puzzle: --</span>
                         </div>
                     </div>
-                    <div id="hackhunt_nav_buttons" style="display: flex; gap: 10px;">
-                        <button id="nav_btn_0" onclick="switchHackHuntTask(0)" class="nav-button">Task 1</button>
-                        <button id="nav_btn_1" onclick="switchHackHuntTask(1)" class="nav-button">Task 2</button>
-                        <button id="nav_btn_2" onclick="switchHackHuntTask(2)" class="nav-button">Task 3</button>
+                    <div id="hackhunt_nav_buttons" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <!-- Nav buttons generated dynamically by startHackHunt() -->
                     </div>
                     <div style="margin-top: 15px; display: flex; align-items: center; gap: 10px;">
                         <label for="show_symbol_numbers" style="font-size: 1.1em; color: #555;">Show symbol numbers:
